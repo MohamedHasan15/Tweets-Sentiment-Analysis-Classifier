@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<link rel="stylesheet"  href="{{ url_for('static', filename='styles/applicationStylesheet.css')}}">
+<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tweets Classifier</title>
+
+<link rel="icon" sizes="50x50" href="/static/images/3.png">
+
+
+<style>
+body{
+    padding:0;
+    margin:0;
+    width:100%;
+    height:100vh;
+    background:radial-gradient(#9b59b6, #8e44ad);
+}
+.wrapper{
+    width:200px;
+    height:0px;
+    position: absolute;
+    left:45%;
+    top:60%;
+    transform: translate(-50%, -50%);
+}
+.circle{
+    width:20px;
+    height:20px;
+    position: absolute;
+    border-radius: 50%;
+    background-color: #fff;
+    left:15%;
+    transform-origin: 50%;
+    animation: circle .5s alternate infinite ease;
+}
+
+@keyframes circle{
+    0%{
+        top:60px;
+        height:5px;
+        border-radius: 50px 50px 25px 25px;
+        transform: scaleX(1.7);
+    }
+    40%{
+        height:20px;
+        border-radius: 50%;
+        transform: scaleX(1);
+    }
+    100%{
+        top:0%;
+    }
+}
+.circle:nth-child(2){
+    left:45%;
+    animation-delay: .2s;
+}
+.circle:nth-child(3){
+    left:auto;
+    right:15%;
+    animation-delay: .3s;
+}
+.shadow{
+    width:20px;
+    height:4px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,.5);
+    position: absolute;
+    top:62px;
+    transform-origin: 50%;
+    z-index: -1;
+    left:15%;
+    filter: blur(1px);
+    animation: shadow .5s alternate infinite ease;
+}
+
+@keyframes shadow{
+    0%{
+        transform: scaleX(1.5);
+    }
+    40%{
+        transform: scaleX(1);
+        opacity: .7;
+    }
+    100%{
+        transform: scaleX(.2);
+        opacity: .4;
+    }
+}
+.shadow:nth-child(4){
+    left: 45%;
+    animation-delay: .2s
+}
+.shadow:nth-child(5){
+    left:auto;
+    right:15%;
+    animation-delay: .3s;
+}
+.wrapper span{
+    position: absolute;
+    top:75px;
+    font-family: 'Lato';
+    font-size: 20px;
+    letter-spacing: 12px;
+    color: #fff;
+    left:15%;
+}
+</style>
+
+<style>
+	body {
+	  background-image: url("/static/images/ssss.png");
+	  background-repeat: no-repeat;
+	  background-attachment: fixed;
+	  background-size: 100% 100%;
+	}
+	</style>
+
+
+	
+<style>
+    input:focus, textarea:focus, select:focus{
+        outline: none;
+    }
+</style>
+
+<link href='https://fonts.googleapis.com/css?family=Reem Kufi' rel='stylesheet'>
+<style>
+body {
+	font-family: 'Reem Kufi';font-size: 20px;
+	
+}
+</style>
+
+<style>
+	body {font-family: Arial, Helvetica, sans-serif;}
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 1; /* Sit on top */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	  -webkit-animation-name: fadeIn; /* Fade in the background */
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: fadeIn;
+	  animation-duration: 0.4s
+	}
+	
+	/* Modal Content */
+	.modal-content {
+	  position: fixed;
+	  bottom: 0;
+	  background-color: #fefefe;
+	  width: 100%;
+	  -webkit-animation-name: slideIn;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: slideIn;
+	  animation-duration: 0.4s
+	}
+	
+	/* The Close Button */
+	.close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+	
+	.close:hover,
+	.close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	.modal-header {
+	  padding: 22px 16px;
+	  background-color: #A569BD ;
+	  color: white;
+	}
+	
+	.modal-body {padding: 22px 16px;}
+	
+	
+	
+	/* Add Animation */
+	@-webkit-keyframes slideIn {
+	  from {bottom: -300px; opacity: 0} 
+	  to {bottom: 0; opacity: 1}
+	}
+	
+	@keyframes slideIn {
+	  from {bottom: -300px; opacity: 0}
+	  to {bottom: 0; opacity: 1}
+	}
+	
+	@-webkit-keyframes fadeIn {
+	  from {opacity: 0} 
+	  to {opacity: 1}
+	}
+	
+	@keyframes fadeIn {
+	  from {opacity: 0} 
+	  to {opacity: 1}
+	}
+	</style>
+
+</head>
+
+
+<body>
+
+	<div class="Iam">
+		<b>
+		<div class="innerIam">
+			
+			<span style="color: #2ECC71">  Positive<br/> </span>
+			Negative
+		  </div>
+		<p>Classify if The Tweets Are:</p>
+		</b>
+		  
+	</div>
+
+	<svg class="Rectangle_4">
+		<div class="Rectangle_4">
+			<img src="{{url_for('static', filename = 'images/AdobeStock_305233591.jpg')}}" width="438" height="131" >
+		</div>
+		<rect id="Rectangle_4" rx="0" ry="0" x="0" y="0" width="438" height="131">
+		</rect>
+	</svg>
+
+
+	<svg class="Rectangle_5">
+		<rect id="Rectangle_5" rx="0" ry="0" x="0" y="0" width="438" height="116">
+		</rect>
+	</svg>
+
+
+	<svg class="Ellipse_2">
+		<ellipse id="Ellipse_2" rx="56.5" ry="53.5" cx="56.5" cy="53.5"> 
+		</ellipse>
+	</svg>
+
+
+	<div class="Ellipse_2">
+		<div class="Rounded">
+		<img src="{{url_for('static', filename = 'images/131394454_229611295272826_8978381260973437247_o.jpg')}}" width=112.4px height= 106.9px >
+	</div>
+</div>
+
+	
+
+	<div id="Machinfy">
+		<span>@machinfy</span>
+	</div>
+
+	<div id="Tweets">
+		<span>Tweets</span>
+	</div>
+
+	<div id="ID0">
+		<span>22</span>
+	</div>
+
+
+
+
+	<svg class="Rectangle_1">
+		<div class="Rectangle_1">
+			<img src="{{url_for('static', filename = 'images/4051499.png')}}" width="693" height="342" >
+		</div>
+		<rect id="Rectangle_1" rx="0" ry="0" x="0" y="0" width="693" height="342">
+		</rect>
+	</svg>
+
+	<svg class="Rectangle_2"> 
+		<rect id="Rectangle_2" rx="18" ry="18" x="0" y="0" width="604" height="260">
+		</rect>
+	</svg>
+
+
+
+	
+	<svg class="Ellipse_1">
+		<ellipse id="Ellipse_1" rx="24.5" ry="23.5" cx="24.5" cy="23.5">
+		</ellipse>
+	</svg>
+
+	<div class="Ellipse_1">
+		<div class="Rounded">
+		<img src="{{url_for('static', filename = 'images/131394454_229611295272826_8978381260973437247_o.jpg')}}" width=49px height= 47px >
+	</div>
+</div>
+
+	<div id="Following">
+		<span>Following</span>
+	</div>
+
+	<div id="Followers">
+		<span>Followers</span>
+	</div>
+
+	<div id="ID10">
+		<span>1</span>
+	</div>
+
+	<div id="ID100">
+		<span>8</span>
+	</div>
+
+
+
+	<form action="{{ url_for('predict')}}" method="POST">
+
+		<textarea id="ttt" rows="9" cols="150" name="text" style="border: none" placeholder="What's happening?"></textarea>
+		
+		<div class="BG">
+			<button id="myBtn" class="Rectangle_3" type="submit" onclick="MyFunction()"> Tweet</button>
+			
+		</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" >
+
+	<!-- Modal content -->
+	<div class="modal-content">
+	  <div class="modal-header">
+		<span class="close">&times;</span>
+
+		<script type="text/javascript">
+		var result;
+        if (result == "Positive"){
+			result = "Positive";
+		}
+		else if (result == "Negative"){
+			result= "Negative";
+		}
+		</script>
+
+		<h2>The Tweet is: {{result}}
+		</h2>
+	  </div>
+	  <div id= "999" class="modal-body">
+		<p></p>
+	  </div>
+	  
+	</div>
+  
+  </div>
+</form>
+
+  <script>
+	// Get the modal
+	var modal = document.getElementById("myModal");
+	
+	// Get the button that opens the modal
+	var btn = document.getElementById("myBtn");
+	
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+	// When the user clicks the button, open the modal 
+	var i = 22;
+
+	btn.onclick = function() {
+		if(document.getElementById('ttt').value == ""){
+			alert('Your Tweet is empty!');
+			return false;
+		} 
+		else{
+
+			i++;
+	
+	document.getElementById('ID0').innerHTML = i;
+	document.getElementById("999").innerHTML = document.getElementById("ttt").value;
+    document.getElementById('wrapper').style.display = "block";
+	modal.style.display = "block";
+	
+		}
+	}
+	
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+	  modal.style.display = "none";
+	}
+	
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	  if (event.target == modal) {
+		modal.style.display = "none";
+	  }
+	}
+	</script>
+
+
+
+		<div id="wrapper" style="display:none;" class="wrapper">
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="shadow"></div>
+			<div class="shadow"></div>
+			<div class="shadow"></div>
+			<span>Loading</span>
+		</div>
+	
+
+
+</body>
+
+</html>
